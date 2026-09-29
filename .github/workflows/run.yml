@@ -2,7 +2,7 @@ name: Test Vedic - Generate results.json
 
 on:
   schedule:
-    - cron: '*/10 * * * *' # Har 10 minute me auto - no cron-job needed
+    - cron: '*/10 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -13,39 +13,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
       - name: Install deps
         run: pip install requests beautifulsoup4
-
-      - name: Generate results.json (supports both file names)
+      - name: Generate results.json
         run: |
-          ls -la
           if [ -f "uk49_results_generator.py" ]; then
-            echo "Found correct name"
             python uk49_results_generator.py
-          elif [ -f "Uk49-Results-Generator.py" ]; then
-            echo "Found capital hyphen name - running it"
-            python Uk49-Results-Generator.py
-          elif [ -f "UK49-Results-Generator.py" ]; then
-            python UK49-Results-Generator.py
           else
-            echo "No generator file found!"
-            ls -la
-            exit 1
+            python Uk49-Results-Generator.py
           fi
-
-      - name: Commit and Push results.json
+      - name: Commit and Push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add results.json
           git diff --staged --quiet || git commit -m "Auto update results.json - $(date -u)"
           git push
-
-      - name: Show file
-        run: cat results.json
