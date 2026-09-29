@@ -1,0 +1,58 @@
+[
+  {
+    "slug": "uk49s-brunchtime",
+    "numbers": [
+      "10",
+      "21",
+      "27",
+      "32",
+      "33",
+      "34"
+    ],
+    "bonus": "24",
+    "dateLong": "29 September 2026",
+    "date": "29 September 2026"
+  },
+  {
+    "slug": "uk49s-lunchtime",
+    "numbers": [
+      "07",
+      "17",
+      "22",
+      "24",
+      "34",
+      "39"
+    ],
+    "bonus": "11",
+    "dateLong": "29 September 2026",
+    "date": "29 September 2026"
+  },
+  {
+    "slug": "uk49s-drivetime",
+    "numbers": [
+      "08",
+      "14",
+      "38",
+      "45",
+      "47",
+      "48"
+    ],
+    "bonus": "01",
+    "dateLong": "28 September 2026",
+    "date": "28 September 2026"
+  },
+  {
+    "slug": "uk49s-teatime",
+    "numbers": [
+      "04",
+      "25",
+      "26",
+      "31",
+      "38",
+      "46"
+    ],
+    "bonus": "08",
+    "dateLong": "28 September 2026",
+    "date": "28 September 2026"
+  }
+]
