@@ -7,11 +7,13 @@ import requests
 from bs4 import BeautifulSoup
 
 # ================= 1. Configuration =================
+WP_DOMAIN = os.getenv("WP_DOMAIN", "https://test.vedicvibe.online")
 PAGE_ID_HOME = os.getenv("WP_PAGE_ID", "20")
 PAGE_ID_LUNCHTIME = "74"  # Dedicated child page for UK49s Lunchtime
 
-WP_PAGE_ENDPOINT_HOME = f"https://test.vedicvibe.online/wp-json/wp/v2/pages/{PAGE_ID_HOME}"
-WP_PAGE_ENDPOINT_LUNCHTIME = f"https://test.vedicvibe.online/wp-json/wp/v2/pages/{PAGE_ID_LUNCHTIME}"
+WP_DOMAIN = os.getenv("WP_DOMAIN", "https://test.vedicvibe.online")
+WP_PAGE_ENDPOINT_HOME = f"{WP_DOMAIN}/wp-json/wp/v2/pages/{PAGE_ID_HOME}"
+WP_PAGE_ENDPOINT_LUNCHTIME = f"{WP_DOMAIN}/wp-json/wp/v2/pages/{PAGE_ID_LUNCHTIME}"
 
 WP_USER = os.getenv("WP_USER", os.getenv("WP_USERNAME", "admin"))
 APP_PASSWORD = os.getenv("APP_PASSWORD", os.getenv("WP_APP_PASSWORD", ""))
