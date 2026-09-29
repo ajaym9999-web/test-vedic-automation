@@ -1,35 +1,24 @@
-name: Daily UK49s Results Update - Timetable Based
-
+name: Daily UK49s Results Update
 on:
   schedule:
-    # UK49s exact draw times (UTC) + backup every 30 min
-    - cron: '49 10 * * *'  # Brunchtime 10:49 UTC
-    - cron: '49 11 * * *'  # Lunchtime 11:49 UTC (12:45 UK time)
-    - cron: '49 15 * * *'  # Drivetime 15:49 UTC
-    - cron: '49 16 * * *'  # Teatime 16:49 UTC
-    - cron: '0 19 * * *'   # SA Daily Lotto 21:00 SAST = 19:00 UTC
-    - cron: '*/30 * * * *' # Safety backup
+    - cron: '55 9 * * *'
+    - cron: '55 11 * * *'
+    - cron: '55 14 * * *'
+    - cron: '55 16 * * *'
+    - cron: '*/30 * * * *'
   workflow_dispatch:
-
 jobs:
-  update-lottery:
+  update:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install Dependencies
-        run: |
-          pip install requests beautifulsoup4
-
-      - name: Run Scraper & Update WP
-        env:
-          WP_USER: ${{ secrets.WP_USER }}
-          APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
-          WP_PAGE_ID: "20"
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: pip install requests beautifulsoup4
+      - env:
+          WP_USERNAME: ${{ secrets.WP_USERNAME }}
+          WP_USER: ${{ secrets.WP_USERNAME }}
+          WP_APP_PASSWORD: ${{ secrets.WP_APP_PASSWORD }}
+          APP_PASSWORD: ${{ secrets.WP_APP_PASSWORD }}
+          WP_PAGE_ID: "49"
         run: python uk49_bot.py
