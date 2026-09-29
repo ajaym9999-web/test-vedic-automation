@@ -1,33 +1,39 @@
-name: Test Lottery Auto Updater
+name: Test Vedic - Generate results.json
 
 on:
   schedule:
-    # Traffic bachane ke liye exact draw ke 5 min baad
-    - cron: '55 11 * * *'  # Lunchtime: 11:55 UTC = 5:25 PM IST
-    - cron: '55 16 * * *'  # Teatime: 16:55 UTC = 10:25 PM IST
-    # Backup har 30 min
-    - cron: '*/30 * * * *'
+    - cron: '55 11 * * *'  # 11:55 UTC = 5:25 PM IST Lunchtime
+    - cron: '55 16 * * *'  # 16:55 UTC = 10:25 PM IST Teatime
+    - cron: '*/30 * * * *' # backup every 30 min
   workflow_dispatch:
 
 jobs:
-  update-lottery:
+  build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - name: Checkout Code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install Dependencies
+      - name: Install deps
         run: pip install requests beautifulsoup4
 
-      - name: Run Scraper & Update WP - TEST
-        env:
-          WP_DOMAIN: https://test.vedicvibe.online
-          WP_USER: ${{ secrets.WP_USER }}
-          APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
-          WP_PAGE_ID: "20"
-        run: python uk49_bot_test.py
+      - name: Generate results.json
+        run: python uk49_results_generator.py
+
+      - name: Commit and Push results.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add results.json
+          git diff --staged --quiet || git commit -m "Auto update results.json - $(date -u)"
+          git push
+
+      - name: Show file
+        run: cat results.json
