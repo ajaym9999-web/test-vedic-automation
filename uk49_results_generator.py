@@ -1,4 +1,3 @@
-
 import requests
 from bs4 import BeautifulSoup
 import json
@@ -62,7 +61,16 @@ def scrape_one(slug, url):
         return None
 
 def main():
-    # Load old results.json if exists - to keep kal ka data
+    # Load old history - yehi source of truth hai ab
+    hist_path = "history.json"
+    history = {}
+    if os.path.exists(hist_path):
+        try:
+            with open(hist_path,"r") as hf:
+                history = json.load(hf)
+        except:
+            history = {}
+
     old_by_slug = {}
     if os.path.exists("results.json"):
         try:
@@ -71,7 +79,6 @@ def main():
                 for item in old:
                     if "slug" in item:
                         old_by_slug[item["slug"]] = item
-            print(f"Loaded old results.json with {len(old_by_slug)} draws - will use as fallback for kal ka data")
         except Exception as e:
             print(f"Could not load old results.json: {e}")
 
@@ -90,56 +97,84 @@ def main():
                 print(f"  OK FALLBACK: {res2['numbers']} - {res2['dateLong']}")
                 results.append(res2)
             else:
-                # KAL KA DATA LOGIC: agar aaj ka nahi mila to kal wala purana hi rakho, khali mat dikhao
                 if slug in old_by_slug:
                     print(f"  -> Aaj ka nahi mila, KAL KA DATA rakh raha hu for {slug}: {old_by_slug[slug]['numbers']} - {old_by_slug[slug].get('dateLong')}")
                     results.append(old_by_slug[slug])
                 else:
-                    print(f"  -> Failed {slug} and no old data found, skipping")
+                    print(f"  -> Failed {slug} and no old data")
 
-    # Final safety: if still empty, keep all old data
     if len(results) == 0 and old_by_slug:
-        print("All scrapes failed, keeping entire old results.json to avoid empty page")
+        print("All scrapes failed, keeping entire old results.json")
         results = list(old_by_slug.values())
 
-    with open("results.json","w") as f:
-        json.dump(results, f, indent=2)
-    print(f"\nresults.json written with {len(results)} draws")
-
-    # --- 10 DAYS HISTORY LOGIC ---
-    hist_path = "history.json"
-    history = {}
-    if os.path.exists(hist_path):
-        try:
-            with open(hist_path,"r") as hf:
-                history = json.load(hf)
-        except:
-            history = {}
+    # --- HISTORY UPDATE (pehle) ---
     for r in results:
         slug = r["slug"]
         lst = history.get(slug, [])
-        # agar same date + same numbers already hai to duplicate mat karo
         if lst and lst[0].get("dateLong")==r["dateLong"] and lst[0].get("numbers")==r["numbers"]:
             continue
-        # draw number: last se +1, nahi to 2499 se start
-        last_no = lst[0].get("drawNo", 2499) if lst else 2499
+        last_no = lst[0].get("drawNo", 2480) if lst else 2480
+        # agar history khali hai to 2488 se start, taaki aaj 1 Oct ko 2488 ban sake jaisa tere screenshot me hai
         entry = {
-            "drawNo": last_no+1 if lst else 2500,
+            "drawNo": (last_no+1) if lst else (lst[0].get("drawNo", 2488) if lst else 2488),
             "numbers": r["numbers"],
             "bonus": r["bonus"],
             "dateLong": r["dateLong"],
             "date": r["date"]
         }
-        # fix: pehli baar me drawNo sahi rakho
         if not lst:
-            # purane screenshot me #2499 tha, isliye 2500 se start
-            entry["drawNo"] = 2500
+            entry["drawNo"] = 2488
+        else:
+            entry["drawNo"] = last_no+1
         lst.insert(0, entry)
-        history[slug] = lst[:10]  # sirf last 10 rakho
+        # date ke hisaab se sort karo taaki 1 Oct upar rahe, 30 Sep niche
+        # duplicate date hatane ke liye dict use karo
+        seen = {}
+        dedup = []
+        for item in lst:
+            key = item["dateLong"]+"|"+",".join(item["numbers"])
+            if key not in seen:
+                seen[key]=True
+                dedup.append(item)
+        # date sort - newest first (parse)
+        def parse_date(d):
+            try:
+                return datetime.strptime(d["dateLong"], "%d %B %Y")
+            except:
+                return datetime.min
+        dedup.sort(key=parse_date, reverse=True)
+        history[slug] = dedup[:10]
+
     with open(hist_path,"w") as hf:
         json.dump(history, hf, indent=2)
-    print(f"history.json written with 10-days history per draw")
-    print(json.dumps(history, indent=2))
+    print(f"history.json written")
+
+    # --- RESULTS.JSON ko HISTORY se banao taaki homepage aur detail page SYNC rahe ---
+    final_results = []
+    for slug in URLS.keys():
+        lst = history.get(slug, [])
+        if lst:
+            latest = lst[0]
+            final_results.append({
+                "slug": slug,
+                "name": slug.replace("uk49s-","UK49s ").title(),
+                "numbers": latest["numbers"],
+                "bonus": latest["bonus"],
+                "dateLong": latest["dateLong"],
+                "date": latest["date"],
+                "history": lst  # homepage bhi chaahe to history dekh sake
+            })
+        else:
+            # fallback
+            for r in results:
+                if r["slug"]==slug:
+                    r["name"]=slug.replace("uk49s-","UK49s ").title()
+                    r["history"]=[]
+                    final_results.append(r)
+    with open("results.json","w") as f:
+        json.dump(final_results, f, indent=2)
+    print(f"results.json written from history (SYNC) with {len(final_results)} draws")
+    print(json.dumps(final_results, indent=2))
 
 if __name__ == "__main__":
     main()
