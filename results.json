@@ -2,16 +2,16 @@
   {
     "slug": "uk49s-lunchtime",
     "numbers": [
+      "01",
       "03",
-      "11",
-      "14",
-      "25",
-      "38",
-      "48"
+      "10",
+      "27",
+      "28",
+      "33"
     ],
-    "bonus": "07",
-    "dateLong": "30 September 2026",
-    "date": "30 September 2026",
+    "bonus": "46",
+    "dateLong": "1 October 2026",
+    "date": "1 October 2026",
     "source": "https://za.national-lottery.com/amp/uk-49s/results/lunchtime"
   },
   {
@@ -32,16 +32,16 @@
   {
     "slug": "uk49s-brunchtime",
     "numbers": [
-      "07",
+      "02",
       "09",
-      "19",
-      "23",
-      "27",
-      "43"
+      "11",
+      "16",
+      "33",
+      "46"
     ],
-    "bonus": "02",
-    "dateLong": "30 September 2026",
-    "date": "30 September 2026",
+    "bonus": "05",
+    "dateLong": "1 October 2026",
+    "date": "1 October 2026",
     "source": "https://za.national-lottery.com/amp/uk-49s/results/brunchtime"
   },
   {
