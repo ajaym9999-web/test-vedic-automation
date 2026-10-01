@@ -1,6 +1,7 @@
 [
   {
     "slug": "uk49s-lunchtime",
+    "name": "Uk49S Lunchtime",
     "numbers": [
       "01",
       "03",
@@ -12,25 +13,57 @@
     "bonus": "46",
     "dateLong": "1 October 2026",
     "date": "1 October 2026",
-    "source": "https://za.national-lottery.com/amp/uk-49s/results/lunchtime"
+    "history": [
+      {
+        "drawNo": 2488,
+        "numbers": [
+          "01",
+          "03",
+          "10",
+          "27",
+          "28",
+          "33"
+        ],
+        "bonus": "46",
+        "dateLong": "1 October 2026",
+        "date": "1 October 2026"
+      }
+    ]
   },
   {
     "slug": "uk49s-teatime",
+    "name": "Uk49S Teatime",
     "numbers": [
-      "01",
-      "07",
-      "14",
-      "19",
-      "27",
-      "44"
+      "06",
+      "12",
+      "16",
+      "29",
+      "37",
+      "45"
     ],
-    "bonus": "37",
-    "dateLong": "30 September 2026",
-    "date": "30 September 2026",
-    "source": "https://za.national-lottery.com/amp/uk-49s/results/teatime"
+    "bonus": "49",
+    "dateLong": "1 October 2026",
+    "date": "1 October 2026",
+    "history": [
+      {
+        "drawNo": 2488,
+        "numbers": [
+          "06",
+          "12",
+          "16",
+          "29",
+          "37",
+          "45"
+        ],
+        "bonus": "49",
+        "dateLong": "1 October 2026",
+        "date": "1 October 2026"
+      }
+    ]
   },
   {
     "slug": "uk49s-brunchtime",
+    "name": "Uk49S Brunchtime",
     "numbers": [
       "02",
       "09",
@@ -42,21 +75,52 @@
     "bonus": "05",
     "dateLong": "1 October 2026",
     "date": "1 October 2026",
-    "source": "https://za.national-lottery.com/amp/uk-49s/results/brunchtime"
+    "history": [
+      {
+        "drawNo": 2488,
+        "numbers": [
+          "02",
+          "09",
+          "11",
+          "16",
+          "33",
+          "46"
+        ],
+        "bonus": "05",
+        "dateLong": "1 October 2026",
+        "date": "1 October 2026"
+      }
+    ]
   },
   {
     "slug": "uk49s-drivetime",
+    "name": "Uk49S Drivetime",
     "numbers": [
       "04",
+      "10",
+      "12",
       "13",
       "17",
-      "26",
-      "39",
-      "47"
+      "20"
     ],
-    "bonus": "06",
-    "dateLong": "30 September 2026",
-    "date": "30 September 2026",
-    "source": "https://za.national-lottery.com/amp/uk-49s/results/drivetime"
+    "bonus": "16",
+    "dateLong": "1 October 2026",
+    "date": "1 October 2026",
+    "history": [
+      {
+        "drawNo": 2488,
+        "numbers": [
+          "04",
+          "10",
+          "12",
+          "13",
+          "17",
+          "20"
+        ],
+        "bonus": "16",
+        "dateLong": "1 October 2026",
+        "date": "1 October 2026"
+      }
+    ]
   }
 ]
