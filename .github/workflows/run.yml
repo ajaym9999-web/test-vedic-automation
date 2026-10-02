@@ -1,8 +1,8 @@
 name: Build
 on:
+  workflow_dispatch:
   schedule:
     - cron: '*/15 * * * *'
-  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -13,21 +13,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install deps
-        run: pip install requests beautifulsoup4
-      - name: Generate results.json
-        run: |
-          if [ -f "uk49_results_generator.py" ]; then
-            python uk49_results_generator.py
-          elif [ -f "uk49_bot.py" ]; then
-            python uk49_bot.py
-          else
-            echo "Generator not found"; ls -la; exit 1
-          fi
-      - name: Commit and Push
-        run: |
+      - run: pip install requests beautifulsoup4
+      - run: python uk49_results_generator.py
+      - run: |
           git config user.name "bot"
           git config user.email "bot@github.com"
-          git add results.json history.json
-          git diff --staged --quiet || git commit -m "auto update"
+          git add history.json results.json
+          git diff --staged --quiet || git commit -m "fix: clean history no duplicates"
           git push
