@@ -3,31 +3,31 @@
     "slug": "uk49s-lunchtime",
     "name": "Uk49S Lunchtime",
     "numbers": [
-      "06",
       "07",
-      "08",
-      "09",
       "10",
-      "11"
+      "16",
+      "40",
+      "47",
+      "48"
     ],
-    "bonus": "04",
-    "dateLong": "02 October 2026",
-    "date": "02 October 2026",
+    "bonus": "19",
+    "dateLong": "2 October 2026",
+    "date": "2 October 2026",
     "history": [
       {
         "drawNo": 2507,
         "no": 2507,
         "numbers": [
-          "06",
           "07",
-          "08",
-          "09",
           "10",
-          "11"
+          "16",
+          "40",
+          "47",
+          "48"
         ],
-        "bonus": "04",
-        "dateLong": "02 October 2026",
-        "date": "02 October 2026"
+        "bonus": "19",
+        "dateLong": "2 October 2026",
+        "date": "2 October 2026"
       },
       {
         "drawNo": 2506,
@@ -200,16 +200,16 @@
         "drawNo": 2506,
         "no": 2506,
         "numbers": [
-          "09",
-          "10",
-          "11",
+          "06",
           "12",
-          "13",
-          "14"
+          "16",
+          "29",
+          "37",
+          "45"
         ],
-        "bonus": "11",
-        "dateLong": "01 October 2026",
-        "date": "01 October 2026"
+        "bonus": "49",
+        "dateLong": "1 October 2026",
+        "date": "1 October 2026"
       },
       {
         "drawNo": 2505,
@@ -337,31 +337,31 @@
     "slug": "uk49s-brunchtime",
     "name": "Uk49S Brunchtime",
     "numbers": [
-      "06",
-      "07",
-      "08",
-      "09",
-      "10",
-      "11"
+      "11",
+      "16",
+      "19",
+      "23",
+      "33",
+      "34"
     ],
-    "bonus": "04",
-    "dateLong": "02 October 2026",
-    "date": "02 October 2026",
+    "bonus": "08",
+    "dateLong": "2 October 2026",
+    "date": "2 October 2026",
     "history": [
       {
         "drawNo": 2507,
         "no": 2507,
         "numbers": [
-          "06",
-          "07",
-          "08",
-          "09",
-          "10",
-          "11"
+          "11",
+          "16",
+          "19",
+          "23",
+          "33",
+          "34"
         ],
-        "bonus": "04",
-        "dateLong": "02 October 2026",
-        "date": "02 October 2026"
+        "bonus": "08",
+        "dateLong": "2 October 2026",
+        "date": "2 October 2026"
       },
       {
         "drawNo": 2506,
@@ -505,30 +505,30 @@
     "name": "Uk49S Drivetime",
     "numbers": [
       "06",
-      "07",
-      "08",
-      "09",
-      "10",
-      "11"
+      "12",
+      "18",
+      "26",
+      "29",
+      "41"
     ],
-    "bonus": "04",
-    "dateLong": "02 October 2026",
-    "date": "02 October 2026",
+    "bonus": "25",
+    "dateLong": "2 October 2026",
+    "date": "2 October 2026",
     "history": [
       {
         "drawNo": 2507,
         "no": 2507,
         "numbers": [
           "06",
-          "07",
-          "08",
-          "09",
-          "10",
-          "11"
+          "12",
+          "18",
+          "26",
+          "29",
+          "41"
         ],
-        "bonus": "04",
-        "dateLong": "02 October 2026",
-        "date": "02 October 2026"
+        "bonus": "25",
+        "dateLong": "2 October 2026",
+        "date": "2 October 2026"
       },
       {
         "drawNo": 2506,
