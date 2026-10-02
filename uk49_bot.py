@@ -57,10 +57,25 @@ def scrape_one(slug, url):
         return None
 
 def parse_date(dstr):
+    # Try multiple formats
+    for fmt in ("%d %B %Y", "%d %b %Y", "%B %d %Y"):
+        try:
+            return datetime.strptime(dstr.strip(), fmt)
+        except:
+            continue
     try:
-        return datetime.strptime(dstr, "%d %B %Y")
+        # remove extra spaces, leading zero safe
+        return datetime.strptime(dstr.strip(), "%d %B %Y")
     except:
         return datetime.min
+
+
+def normalize_date_key(dstr):
+    # parse then reformat to DD Month YYYY to make 2 Oct and 02 Oct same
+    dt = parse_date(dstr)
+    if dt == datetime.min:
+        return dstr.strip().lower()
+    return dt.strftime("%d %B %Y")
 
 def main():
     hist_path = "history.json"
@@ -72,18 +87,23 @@ def main():
         except:
             history = {}
 
-    # CLEAN existing history - remove duplicates completely
+    # CLEAN: key by NORMALIZED date to avoid duplicate dates like 02 Oct vs 2 Oct
     for slug in list(history.keys()):
         lst = history.get(slug, [])
-        cleaned = []
-        seen_keys = set()
+        by_date = {}
         for item in lst:
-            key = f"{item.get('dateLong','')}|{','.join(item.get('numbers',[]))}|{item.get('bonus','')}"
-            if key not in seen_keys:
-                seen_keys.add(key)
-                cleaned.append(item)
-        # sort by date desc then drawNo desc
-        cleaned.sort(key=lambda x: (parse_date(x.get('dateLong','')), x.get('drawNo',0)), reverse=True)
+            raw = item.get('dateLong','').strip()
+            if not raw:
+                continue
+            norm_key = normalize_date_key(raw)
+            # keep entry with higher drawNo if duplicate normalized date
+            if norm_key not in by_date:
+                by_date[norm_key] = item
+            else:
+                if item.get('drawNo', item.get('no',0)) > by_date[norm_key].get('drawNo', by_date[norm_key].get('no',0)):
+                    by_date[norm_key] = item
+        cleaned = list(by_date.values())
+        cleaned.sort(key=lambda x: parse_date(x.get('dateLong','')), reverse=True)
         history[slug] = cleaned[:10]
 
     old_by_slug = {}
@@ -113,40 +133,48 @@ def main():
                 print(f"  -> Keep old for {slug}: {old_by_slug[slug]['numbers']} - {old_by_slug[slug].get('dateLong')}")
                 results.append(old_by_slug[slug])
 
-    # UPDATE HISTORY - add only if truly new
+    # UPDATE HISTORY - REPLACE BY NORMALIZED DATE
     for r in results:
         slug = r["slug"]
         lst = history.get(slug, [])
-        new_key = f"{r['dateLong']}|{','.join(r['numbers'])}|{r['bonus']}"
-        exists = any(f"{it.get('dateLong')}|{','.join(it.get('numbers',[]))}|{it.get('bonus','')}" == new_key for it in lst)
-        if exists:
-            print(f"  Skip duplicate {slug} {new_key}")
-            continue
-        max_no = max([it.get('drawNo',2500) for it in lst], default=2506)
-        entry = {
-            "drawNo": max_no + 1,
+        by_date = {}
+        for it in lst:
+            by_date[normalize_date_key(it.get('dateLong',''))] = it
+        
+        norm_new = normalize_date_key(r['dateLong'])
+        # keep old drawNo if same date exists else new max+1
+        existing = by_date.get(norm_new)
+        if existing:
+            draw_no = existing.get('drawNo', existing.get('no', 2500))
+        else:
+            draw_no = max([it.get('drawNo', it.get('no',2500)) for it in lst], default=2506)+1
+        
+        by_date[norm_new] = {
+            "drawNo": draw_no,
+            "no": draw_no,
             "numbers": r["numbers"],
             "bonus": r["bonus"],
-            "dateLong": r["dateLong"],
-            "date": r["date"]
+            "dateLong": r["dateLong"].strip(),
+            "date": r["date"].strip()
         }
-        lst.insert(0, entry)
-        # dedup again
-        seen = set()
-        dedup = []
-        for it in lst:
-            k = f"{it.get('dateLong')}|{','.join(it.get('numbers',[]))}|{it.get('bonus','')}"
+        merged = list(by_date.values())
+        merged.sort(key=lambda x: parse_date(x.get('dateLong','')), reverse=True)
+        history[slug] = merged[:10]
+
+    # Final cleanup - ensure sorted newest first and no duplicate normalized dates
+    for slug in list(history.keys()):
+        lst = history[slug]
+        seen = {}
+        for it in sorted(lst, key=lambda x: parse_date(x.get('dateLong','')), reverse=True):
+            k = normalize_date_key(it.get('dateLong',''))
             if k not in seen:
-                seen.add(k)
-                dedup.append(it)
-        dedup.sort(key=lambda x: (parse_date(x.get('dateLong','')), x.get('drawNo',0)), reverse=True)
-        history[slug] = dedup[:10]
+                seen[k] = it
+        history[slug] = list(seen.values())[:10]
 
     with open(hist_path,"w") as f:
         json.dump(history, f, indent=2)
-    print(f"history.json written cleaned")
+    print(f"history.json written cleaned - sorted by date DESC, duplicates removed by normalized date")
 
-    # BUILD results.json FROM HISTORY LATEST - THIS FIXES HOMEPAGE VS DETAIL MISMATCH
     final_results = []
     for slug in URLS.keys():
         lst = history.get(slug, [])
@@ -161,22 +189,9 @@ def main():
                 "date": latest["date"],
                 "history": lst
             })
-        else:
-            # fallback to scraped
-            for r in results:
-                if r["slug"] == slug:
-                    final_results.append({
-                        "slug": slug,
-                        "name": slug.replace("uk49s-","UK49s ").title(),
-                        "numbers": r["numbers"],
-                        "bonus": r["bonus"],
-                        "dateLong": r["dateLong"],
-                        "date": r["date"],
-                        "history": []
-                    })
     with open("results.json","w") as f:
         json.dump(final_results, f, indent=2)
-    print(f"results.json SYNC written from history - {len(final_results)} draws")
+    print(f"results.json SYNC written from history - {len(final_results)} draws, dates sorted newest first")
     print(json.dumps(final_results, indent=2))
 
 if __name__ == "__main__":
