@@ -3,30 +3,30 @@
     "slug": "uk49s-lunchtime",
     "name": "Uk49S Lunchtime",
     "numbers": [
-      "01",
-      "03",
+      "07",
       "10",
-      "27",
-      "28",
-      "33"
+      "16",
+      "40",
+      "47",
+      "48"
     ],
-    "bonus": "46",
-    "dateLong": "1 October 2026",
-    "date": "1 October 2026",
+    "bonus": "19",
+    "dateLong": "2 October 2026",
+    "date": "2 October 2026",
     "history": [
       {
         "drawNo": 2488,
         "numbers": [
-          "01",
-          "03",
+          "07",
           "10",
-          "27",
-          "28",
-          "33"
+          "16",
+          "40",
+          "47",
+          "48"
         ],
-        "bonus": "46",
-        "dateLong": "1 October 2026",
-        "date": "1 October 2026"
+        "bonus": "19",
+        "dateLong": "2 October 2026",
+        "date": "2 October 2026"
       }
     ]
   },
@@ -65,30 +65,30 @@
     "slug": "uk49s-brunchtime",
     "name": "Uk49S Brunchtime",
     "numbers": [
-      "02",
-      "09",
       "11",
       "16",
+      "19",
+      "23",
       "33",
-      "46"
+      "34"
     ],
-    "bonus": "05",
-    "dateLong": "1 October 2026",
-    "date": "1 October 2026",
+    "bonus": "08",
+    "dateLong": "2 October 2026",
+    "date": "2 October 2026",
     "history": [
       {
         "drawNo": 2488,
         "numbers": [
-          "02",
-          "09",
           "11",
           "16",
+          "19",
+          "23",
           "33",
-          "46"
+          "34"
         ],
-        "bonus": "05",
-        "dateLong": "1 October 2026",
-        "date": "1 October 2026"
+        "bonus": "08",
+        "dateLong": "2 October 2026",
+        "date": "2 October 2026"
       }
     ]
   },
