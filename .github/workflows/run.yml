@@ -1,20 +1,16 @@
-name: Test Vedic - Generate results.json
-
+name: Build
 on:
   schedule:
-    - cron: '*/10 * * * *'
+    - cron: '*/15 * * * *'
   workflow_dispatch:
-
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
       - name: Install deps
@@ -23,13 +19,15 @@ jobs:
         run: |
           if [ -f "uk49_results_generator.py" ]; then
             python uk49_results_generator.py
+          elif [ -f "uk49_bot.py" ]; then
+            python uk49_bot.py
           else
-            python Uk49-Results-Generator.py
+            echo "Generator not found"; ls -la; exit 1
           fi
       - name: Commit and Push
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add results.json
-          git diff --staged --quiet || git commit -m "Auto update results.json - $(date -u)"
+          git config user.name "bot"
+          git config user.email "bot@github.com"
+          git add results.json history.json
+          git diff --staged --quiet || git commit -m "auto update"
           git push
